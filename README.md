@@ -68,9 +68,29 @@ These were deliberately left out rather than invented:
 
 ## Notes
 
-- Responsive from ~320px up; single breakpoints at 920px, 860px and 820px.
+**Mobile first.** The base stylesheet describes the phone layout; four
+`min-width` breakpoints enhance upward, and there are no `max-width` queries:
+
+| Breakpoint | What changes |
+|-----------|--------------|
+| `560px`   | footer goes two-up |
+| `768px`   | footer goes three-up |
+| `860px`   | split features and the tub builder go side by side |
+| `920px`   | nav goes horizontal, hero becomes two columns |
+
+Other mobile specifics:
+
+- The order CTA appears in the phone menu as well as the desktop header, so it
+  is never more than one tap away.
+- Interactive targets are at least 44px (`--tap`); hover lifts are suppressed
+  under `@media (hover:none)` so they cannot stick after a tap.
+- The closed menu is `visibility:hidden`, keeping it out of the tab order. It
+  closes on link tap, Escape, an outside tap, or crossing the 920px breakpoint,
+  and locks body scroll while open.
+- `section[id]` carries `scroll-margin-top` so anchor jumps clear the sticky
+  header.
+- Images are WebP at up to three widths (`-sm` 600px, `-md` 900px, full
+  1080-1200px) wired through `srcset`/`sizes`, and lazy-loaded below the fold.
 - Respects `prefers-reduced-motion` (marquee, reveals and smooth scrolling all
   stand down).
-- Images are WebP at two widths (`-sm` = 600px, full = 1200px) and lazy-loaded
-  below the fold.
 - All photography © Biscuit Bliss.

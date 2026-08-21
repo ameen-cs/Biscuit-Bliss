@@ -58,6 +58,12 @@
       <li><a href="#build">Build a Tub</a></li>
       <li><a href="#story">Our Story</a></li>
       <li><a href="#feed">Feed</a></li>
+      <li class="nav-order">
+        <a class="btn btn--pink" href="https://www.instagram.com/biscuitbliss/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+          Order via DM
+        </a>
+      </li>
     </ul>
   </nav>
 
@@ -67,8 +73,11 @@
   </a>
 
   <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+    <svg class="open-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
       <path d="M4 7h16M4 12h16M4 17h16"/>
+    </svg>
+    <svg class="close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <path d="M6 6l12 12M18 6L6 18"/>
     </svg>
   </button>
 </header>
@@ -109,7 +118,10 @@
 
     <div class="hero-art">
       <div class="card card--main">
-        <img src="img/limited-edition.webp" width="1080" height="1440" fetchpriority="high"
+        <img src="img/limited-edition.webp"
+             srcset="img/limited-edition-sm.webp 600w, img/limited-edition-md.webp 900w, img/limited-edition.webp 1080w"
+             sizes="(min-width:920px) 45vw, min(92vw, 520px)"
+             width="1080" height="1440" fetchpriority="high"
              alt="A two-tier stand loaded with Biscuit Bliss biscuits: coconut snowballs, pistachio-topped shortbread and chocolate-dipped rounds.">
       </div>
       <div class="card card--sub">
@@ -269,7 +281,10 @@
 <section id="tubs" style="padding-top:0">
   <div class="wrap split">
     <div class="split-art reveal">
-      <img src="img/tubs.webp" width="1200" height="1200" loading="lazy"
+      <img src="img/tubs.webp"
+           srcset="img/tubs-sm.webp 600w, img/tubs-md.webp 900w, img/tubs.webp 1200w"
+           sizes="(min-width:860px) 46vw, 92vw"
+           width="1200" height="1200" loading="lazy"
            alt="Stacks of Biscuit Bliss butter biscuit tubs with pink and teal printed labels.">
       <p class="pill-note">
         <img src="img/logo-sm.webp" width="36" height="36" alt="">
@@ -341,7 +356,10 @@
 <section id="story">
   <div class="wrap split split--flip">
     <div class="split-art reveal">
-      <img src="img/pistachio.webp" width="1200" height="1200" loading="lazy"
+      <img src="img/pistachio.webp"
+           srcset="img/pistachio-sm.webp 600w, img/pistachio-md.webp 900w, img/pistachio.webp 1200w"
+           sizes="(min-width:860px) 46vw, 92vw"
+           width="1200" height="1200" loading="lazy"
            alt="A plate of pistachio biscuits, chocolate dipped and dusted with crushed pistachio.">
     </div>
     <div>

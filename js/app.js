@@ -30,17 +30,44 @@
   }
 
   if (toggle && menu) {
-    toggle.addEventListener("click", function () {
-      var open = menu.classList.toggle("open");
+    var desktop = window.matchMedia("(min-width: 920px)");
+
+    var setMenu = function (open) {
+      menu.classList.toggle("open", open);
       toggle.setAttribute("aria-expanded", String(open));
       toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      // Stop the page scrolling behind the open overlay.
+      document.body.style.overflow = open ? "hidden" : "";
+    };
+
+    toggle.addEventListener("click", function () {
+      setMenu(!menu.classList.contains("open"));
     });
+
+    // Any link tap closes it.
     menu.addEventListener("click", function (e) {
-      if (e.target.closest("a")) {
-        menu.classList.remove("open");
-        toggle.setAttribute("aria-expanded", "false");
+      if (e.target.closest("a")) setMenu(false);
+    });
+
+    // Escape closes it, and focus goes back to the button that opened it.
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && menu.classList.contains("open")) {
+        setMenu(false);
+        toggle.focus();
       }
     });
+
+    // Tapping the page outside the overlay closes it.
+    document.addEventListener("click", function (e) {
+      if (!menu.classList.contains("open")) return;
+      if (menu.contains(e.target) || toggle.contains(e.target)) return;
+      setMenu(false);
+    });
+
+    // Rotating to landscape past the breakpoint must not leave the body locked.
+    var onBreakpoint = function (e) { if (e.matches) setMenu(false); };
+    if (desktop.addEventListener) desktop.addEventListener("change", onBreakpoint);
+    else if (desktop.addListener) desktop.addListener(onBreakpoint);
   }
 
   /* --------------------------------------------------------------- reveal */
