@@ -6,6 +6,7 @@
   "use strict";
 
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   /* ---------------------------------------------------------------- toast */
   var toastEl = document.getElementById("toast");
@@ -230,6 +231,102 @@
         toast("Opening Instagram — tell us: " + chosen.join(", ") + ".");
         open();
       }
+    });
+  }
+
+  /* --------------------------------------------------------- card tilt */
+  // Cursor-tracked tilt + spotlight glare on the flavour cards. Desktop only.
+  if (finePointer && !reduced) {
+    document.querySelectorAll(".flavour").forEach(function (card) {
+      card.addEventListener("pointermove", function (e) {
+        var rect = card.getBoundingClientRect();
+        var px = (e.clientX - rect.left) / rect.width;
+        var py = (e.clientY - rect.top) / rect.height;
+        var rotY = (px - 0.5) * 9;
+        var rotX = (0.5 - py) * 9;
+        card.style.setProperty("--mx", (px * 100) + "%");
+        card.style.setProperty("--my", (py * 100) + "%");
+        card.style.transform =
+          "translateY(-8px) rotateX(" + rotX.toFixed(2) + "deg) rotateY(" + rotY.toFixed(2) + "deg)";
+      });
+      card.addEventListener("pointerleave", function () {
+        card.style.transform = "";
+      });
+    });
+  }
+
+  /* -------------------------------------------------------------- count-up */
+  var statNums = document.querySelectorAll(".stat b");
+  if (statNums.length && !reduced && "IntersectionObserver" in window) {
+    var animateCount = function (el) {
+      var match = el.textContent.trim().match(/^([\d.]+)(.*)$/);
+      if (!match) return;
+      var end = parseFloat(match[1]);
+      var suffix = match[2] || "";
+      var whole = end % 1 === 0;
+      var start = null;
+      var dur = 1100;
+      var step = function (ts) {
+        if (start === null) start = ts;
+        var p = Math.min((ts - start) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        var val = end * eased;
+        el.textContent = (whole ? Math.round(val) : val.toFixed(1)) + suffix;
+        if (p < 1) requestAnimationFrame(step);
+      };
+      el.textContent = "0" + suffix;
+      requestAnimationFrame(step);
+    };
+
+    var statIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          animateCount(entry.target);
+          statIo.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.6 });
+    statNums.forEach(function (el) { statIo.observe(el); });
+  }
+
+  /* ------------------------------------------------------- magnetic + spark */
+  function spark(x, y) {
+    if (reduced) return;
+    var n = 8;
+    for (var i = 0; i < n; i++) {
+      var angle = (Math.PI * 2 * i) / n;
+      var dist = 32 + Math.random() * 18;
+      var dot = document.createElement("span");
+      dot.className = "spark-dot";
+      dot.style.left = x + "px";
+      dot.style.top = y + "px";
+      dot.style.setProperty("--dx", (Math.cos(angle) * dist).toFixed(1) + "px");
+      dot.style.setProperty("--dy", (Math.sin(angle) * dist).toFixed(1) + "px");
+      document.body.appendChild(dot);
+      dot.addEventListener("animationend", function () { this.remove(); });
+    }
+  }
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest(".btn--pink");
+    if (btn) spark(e.clientX, e.clientY);
+  });
+
+  if (finePointer && !reduced) {
+    document.querySelectorAll(".btn--pink, .btn--ink").forEach(function (btn) {
+      btn.addEventListener("pointermove", function (e) {
+        if (btn.disabled) return;
+        var rect = btn.getBoundingClientRect();
+        var dx = (e.clientX - rect.left - rect.width / 2) * 0.28;
+        var dy = (e.clientY - rect.top - rect.height / 2) * 0.28;
+        var max = 9;
+        dx = Math.max(-max, Math.min(max, dx));
+        dy = Math.max(-max, Math.min(max, dy));
+        btn.style.transform = "translate(" + dx.toFixed(1) + "px," + (dy - 3).toFixed(1) + "px)";
+      });
+      btn.addEventListener("pointerleave", function () {
+        btn.style.transform = "";
+      });
     });
   }
 
