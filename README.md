@@ -1,4 +1,4 @@
-# Biscuit Bliss — website
+# Biscuit Bliss — website (https://ameen-cs.github.io/Biscuit-Bliss/)
 
 A static, single-page site for **Biscuit Bliss** (@biscuitbliss), a homemade
 butter-biscuit bakery in Durban, South Africa.
